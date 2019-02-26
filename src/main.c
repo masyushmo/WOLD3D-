@@ -25,11 +25,6 @@ int		stop(char *str)
 	return (0);
 }
 
-void	start(t_core *core)
-{
-	player_init(core->player);
-}
-
 int		main(int argc, char **argv)
 {
 	t_core	*core;
@@ -40,8 +35,10 @@ int		main(int argc, char **argv)
 		stop("\033[22;31mERROR: too many args\n");
 	if (!(core = ft_memalloc(sizeof(t_core))))
 		stop("\033[22;31mERROR: failed to malloc main struct");
+	core->w = W_X;
+	core->h = W_Y;
 	if (!(read_map(core, argv[1])))
 		stop("\033[22;31mERROR: invalid map\n");
-	create_win(core);
+	game_loop(core);
 	return (0);
 }

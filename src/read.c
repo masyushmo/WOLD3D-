@@ -18,28 +18,27 @@ int	check_map(t_core *core)
 	int y;
 
 	x = 0;
-	while(x <= core->map_width - 1)
+	while (x <= core->map_width - 1)
 	{
-		if((core->map[0][x] < 1 || core->map[0][x] > 9) || \
+		if ((core->map[0][x] < 1 || core->map[0][x] > 9) || \
 			(core->map[core->map_height - 1][x] < 1 || \
 			core->map[core->map_height - 1][x] > 9))
-			{
-				ft_putnbr(core->map[0][x]);
-				return(0);
-			}
+		{
+			ft_putnbr(core->map[0][x]);
+			return (0);
+		}
 		x++;
 	}
 	y = 0;
-	while(y <= core->map_height - 1)
+	while (y <= core->map_height - 1)
 	{
-		if((core->map[y][0] < 1 || core->map[y][0] > 9) || \
+		if ((core->map[y][0] < 1 || core->map[y][0] > 9) || \
 			(core->map[y][core->map_width - 1] < 1 || \
 			core->map[y][core->map_width - 1] > 9))
-			return(0);
+			return (0);
 		y++;
 	}
-	return(1);
-
+	return (1);
 }
 
 int	map(t_core *core, int fd)
@@ -66,8 +65,6 @@ int	map(t_core *core, int fd)
 		free(line);
 		coord[0]++;
 	}
-	if (!(check_map(core)))
-		return (0);
 	if (ret == -1)
 		return (0);
 	return (1);
@@ -99,7 +96,7 @@ int	count(t_core *core, int fd)
 	int		ret;
 	int		i;
 
-	core->map_width          = 0;
+	core->map_width = 0;
 	core->map_height = 0;
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
@@ -112,7 +109,7 @@ int	count(t_core *core, int fd)
 			return (0);
 		free(line);
 		if (core->map_height == 0)
-			core->map_width          = i;
+			core->map_width = i;
 		else if (i != core->map_width)
 			return (0);
 		core->map_height++;
@@ -139,6 +136,8 @@ int	read_map(t_core *core, char *file)
 	if (!(fd = open(file, O_RDONLY)))
 		return (0);
 	if (!(map(core, fd)))
+		return (0);
+	if (!(check_map(core)))
 		return (0);
 	close(fd);
 	return (1);

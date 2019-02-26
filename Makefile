@@ -17,6 +17,10 @@ SRC = main.c \
 		sdl.c \
 		engine.c \
 		game_init.c \
+		paint.c \
+		paint_calc.c \
+		keys.c \
+		moves.c \
 
 
 CC = gcc
