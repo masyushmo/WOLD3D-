@@ -36,7 +36,7 @@ int		main(int argc, char **argv)
 	if (!(core = ft_memalloc(sizeof(t_core))))
 		stop("\033[22;31mERROR: failed to malloc main struct");
 	core->w = W_X;
-	core->h = W_Y;
+	core->h = W_Y;	
 	if (!(read_map(core, argv[1])))
 		stop("\033[22;31mERROR: invalid map\n");
 	game_loop(core);

@@ -22,7 +22,7 @@
 # include <fcntl.h>
 # define W_X 1280
 # define W_Y 720
-# define WALL_TEXTS 8
+# define WALL_TEXTS 9
 # define EXIT (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
 
 typedef struct		s_player
@@ -41,10 +41,9 @@ typedef struct		s_ray
 {
 	double			rayX;
 	double			rayY;
-	double			winX; 
+	double			winX;
 	double			rayDirX;
 	double			rayDirY;
-	double			distance;
 	int				mapX;
 	int				mapY;
 }					t_ray;
@@ -68,23 +67,28 @@ typedef struct		s_paint
 	int				texY;
 	int				dormamu;
 	int				color;
+	int				floorTexX;
+	int				floorTexY;
 	double			wallX;
+	double			floorX;
+	double			floorY;
+	double			floorWall;
+	double			floorPlayer;
+	double			Dist;
+	double			newFloorX;
+	double			newFloorY;
+	double			floorW_X;
 }					t_paint;
 
 typedef struct		s_texture
 {
 	SDL_Surface		**wall_TEX;
-	SDL_Surface		*flor_TEX;
+	SDL_Surface		**wall_TEY;
+	SDL_Surface		*floor_TEX;
 	SDL_Surface		*cel_TET;
 	SDL_Surface		**weapon;
 	SDL_Surface		**enemys;
 }					t_texture;
-
-typedef struct		s_keys
-{
-	char			key[SDL_NUM_SCANCODES];
-	char 			exit;
-}					t_keys;
 
 typedef struct		s_core
 {
@@ -93,7 +97,6 @@ typedef struct		s_core
 	SDL_Texture		*tex;
 	SDL_Rect		*rect;
 	SDL_Surface		*surface;
-	int				tixe;
 	int				win_pixX;
 	int				win_pixY;
 	int				w;
@@ -101,17 +104,16 @@ typedef struct		s_core
 	int				map_width;
 	int				map_height;
 	int				**map;
-	int				**buff;
 	double			distance;
 	int				wall_h;
 	int				pStart;
 	int				pEnd;
+	char 			quit;
 	t_player		*player;
 	t_ray			*ray;
 	t_dda			*dda;
 	t_paint			*paint;
 	t_texture		*texture;
-	t_keys 			*keys;
 }					t_core;
 
 /*
@@ -139,10 +141,9 @@ int					check_map(t_core *core);
 **game_init.c
 */
 void				player_init(t_player *player);
-void				rays_init(t_player *player, t_ray *ray);
-void				dda_init(t_dda *dda, t_ray *ray);
+void				rays_init(t_player *player, t_ray *ray, t_core *core);
+void				dda_init(t_dda *dda, t_ray *ray, t_player *player);
 void				structs_init(t_core *core);
-void				texture_init(t_texture *texture, t_core *core);
 /*
 **engine.c
 */
@@ -153,13 +154,16 @@ void				rays_calc(t_core *core);
 /*
 **paint.c
 */
-Uint32				pix_from_text(SDL_Surface *texture, t_core *core);
-void				pix_to_surf(SDL_Surface *surf, t_core *core);
+Uint32				pix_from_text(SDL_Surface *texture, int x, int y);
+void				pix_to_surf(SDL_Surface *surface, int x, int y, \
+						const int color);
 void				paint(t_core *core);
 /*
 **paint_calc.c
 */
 void				paint_wall(t_core *core, t_paint *paint);
+void				paint_floor(t_core *core, t_paint *paint);
+void				wallSide(t_core *core, t_paint *paint);
 /*
 **keys .c
 */
@@ -173,5 +177,11 @@ void				moveUP(t_core *core, t_player *player);
 void				moveDOWN(t_core *core, t_player *player);
 void				moveLEFT(t_core *core, t_player *player);
 void				moveRIGHT(t_core *core, t_player *player);
+/*
+**textures .c
+*/
+void				texture_init(t_texture *texture, t_core *core);
+void				wall_Xtex(t_texture *texture, t_core *core);
+void				wall_Ytex(t_texture *texture, t_core *core);
 
 #endif

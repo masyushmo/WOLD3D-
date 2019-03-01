@@ -12,29 +12,24 @@
 
 #include "../includes/wolf3d.h"
 
-void	pix_to_surf(SDL_Surface *surface, t_core *core)
+void	pix_to_surf(SDL_Surface *surface, int x, int y, const int color)
 {
-	Uint32		*pixels;
-
+	Uint32 *pixels;
+	
 	pixels = (Uint32 *)surface->pixels;
-	if (core->win_pixX >= 0 && core->win_pixY >= 0 && \
-		core->win_pixX < surface->w && core->win_pixY < surface->h)
-		pixels[core->win_pixY * surface->w + core->win_pixX] = \
-			pix_from_text(core->texture->wall_TEX[core->paint->tex_num], core);
+    pixels[( y * surface->w ) + x] = color;
 }
 
-Uint32	pix_from_text(SDL_Surface *texture, t_core *core)
+Uint32	pix_from_text(SDL_Surface *texture, int x, int y)
 {
-	int		bpp;
-	uint8_t *p;
-
-	bpp = texture->format->BytesPerPixel;
-	p = (uint8_t *)texture->pixels + core->paint->texY * texture->pitch +
-		core->paint->texX * bpp;
-	return (*(uint32_t *)p);
+	Uint32 *ptr;
+	
+	ptr = (Uint32 *)texture->pixels;
+    return ptr[( y * texture->w ) + x];
 }
 
 void	paint(t_core *core)
 {
 	paint_wall(core, core->paint);
+	paint_floor(core, core->paint);
 }

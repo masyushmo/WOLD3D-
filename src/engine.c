@@ -28,7 +28,7 @@ void	dda_alg(t_dda *dda, t_core *core)
 			core->ray->mapY += dda->stepSideY;
 			dda->s = 1;
 		}
-		if (core->map[core->ray->mapX][core->ray->mapY] > 0)
+		if (core->map[core->ray->mapY][core->ray->mapX] > 0)
 			dda->wall_hitt = 1;
 	}
 }
@@ -36,21 +36,20 @@ void	dda_alg(t_dda *dda, t_core *core)
 void	rays_calc(t_core *core)
 {
 	if (core->dda->s == 0)
-		core->distance = (core->ray->mapX - core->ray->rayX + \
+		core->distance = (core->ray->mapX - core->player->coordX + \
 			(1 - core->dda->stepSideX) / 2) / core->ray->rayDirX;
 	else
-		core->distance = (core->ray->mapY - core->ray->rayY + \
+		core->distance = (core->ray->mapY - core->player->coordY + \
 			(1 - core->dda->stepSideY) / 2) / core->ray->rayDirY;
 }
 
 void	game_calc(t_core *core)
 {
-	core->win_pixX = 0;
-	while (core->win_pixX < core->w)
+	core->win_pixX = -1;
+	while (++core->win_pixX < core->w)
 	{
-		core->ray->winX = 2 * core->win_pixX / (double)core->w - 1;
-		rays_init(core->player, core->ray);
-		dda_init(core->dda, core->ray);
+		rays_init(core->player, core->ray, core);
+		dda_init(core->dda, core->ray, core->player);
 		dda_alg(core->dda, core);
 		rays_calc(core);
 		core->wall_h = (int)(core->h / core->distance);
@@ -61,7 +60,6 @@ void	game_calc(t_core *core)
 		if (core->pEnd >= core->h)
 			core->pEnd = core->h - 1;
 		paint(core);
-		core->win_pixX++;
 	}
 }
 
@@ -71,11 +69,15 @@ void	game_loop(t_core *core)
 	create_win(core);
 	player_init(core->player);
 	texture_init(core->texture, core);
-	core->keys->exit = 0;
-	while (!(core->keys->exit))
+	core->quit = 0;
+	while (!(core->quit))
 	{
 		keyses(core);
+		if (SDL_MUSTLOCK(core->surface))
+			SDL_LockSurface(core->surface);
 		game_calc(core);
+		if (SDL_MUSTLOCK(core->surface))
+			SDL_UnlockSurface(core->surface);
 		display_core(core);
 	}
 }

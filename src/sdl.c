@@ -22,15 +22,9 @@ void	create_win(t_core *core)
 	if (!(core->rend = SDL_CreateRenderer(core->win, -1, \
 		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)))
 		stop("\033[22;31mERROR: failed to create render");
-	if (!(core->tex = SDL_CreateTexture(core->rend, SDL_PIXELFORMAT_ARGB32,
+	if (!(core->tex = SDL_CreateTexture(core->rend, SDL_PIXELFORMAT_ARGB8888, \
 		SDL_TEXTUREACCESS_TARGET, W_X, W_Y)))
 		stop("\033[22;31mERROR: failed to create render");
-	if (!(core->rect = ft_memalloc(sizeof(SDL_Rect))))
-		stop("\033[22;31mERROR: failed to create surface");
-		core->rect->h = W_Y;
-		core->rect->w = W_X;
-		core->rect->x = 0;
-		core->rect->y = 0;
 	create_surface(core);
 }
 
@@ -55,10 +49,8 @@ void	create_surface(t_core *core)
 		bmask = 0x00FF0000;
 		amask = 0xFF000000;
 	}
-	core->rect->x = 0;
-	core->rect->y = 0;
-	core->surface = SDL_CreateRGBSurface(0, W_X, \
-		W_Y, 32, rmask, gmask, bmask, amask);
+	core->surface = SDL_CreateRGBSurface(0, core->w, \
+		core->h, 32, rmask, gmask, bmask, amask);
 	if (core->surface == NULL)
 		stop("\033[22;31mERROR: failed to create surface");
 }
@@ -70,10 +62,7 @@ SDL_Surface		*load_texture(char *path, t_core *core)
 
 	temp = SDL_LoadBMP(path);
 	if (temp == NULL)
-	{
-		ft_putstr("Error while loading a texture file\n");
-		exit(1);
-	}
+		stop("\033[22;31mERROR: failed to create texture");
 	texture = SDL_ConvertSurfaceFormat(temp, core->surface->format->format, 0);
 	SDL_FreeSurface(temp);
 	return (texture);
@@ -81,10 +70,10 @@ SDL_Surface		*load_texture(char *path, t_core *core)
 
 void	display_core(t_core *core)
 {
-	SDL_DestroyTexture(core->tex);
 	SDL_RenderClear(core->rend);
+	SDL_DestroyTexture(core->tex);
 	core->tex = SDL_CreateTextureFromSurface(core->rend,
 		core->surface);
-	SDL_RenderCopy(core->rend, core->tex, NULL, core->rect);
+	SDL_RenderCopy(core->rend, core->tex, NULL, NULL);
 	SDL_RenderPresent(core->rend);
 }

@@ -21,6 +21,7 @@ SRC = main.c \
 		paint_calc.c \
 		keys.c \
 		moves.c \
+		textures.c \
 
 
 CC = gcc
