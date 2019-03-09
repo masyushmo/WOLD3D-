@@ -12,7 +12,7 @@
 
 NAME = libft.a
 
-FLAGS = -Wall -Werror -Wextra -I. -c
+FLAGS = -O3 -Wall -Werror -Wextra -I. -c
 
 SRCS = ft_bzero.c \
 					ft_memccpy.c \
@@ -77,7 +77,9 @@ SRCS = ft_bzero.c \
 					ft_lstiter.c \
 					ft_lstnew.c \
 					ft_lstmap.c \
-					get_next_line.c
+					get_next_line.c \
+					percent.c \
+					line_pos.c \
 
 OUT = $(SRCS:.c=.o)
 

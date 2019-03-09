@@ -87,16 +87,12 @@ int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 int					ft_sqrt(int nb);
 int					get_next_line(const int fd, char **line);
-/*
-**exp
-*/
+int					line_point(int start, int end, double p);
 double				ft_expon(double n, int pow);
-/*
-**exp
-*/
 unsigned long long	ft_factorial(unsigned long long int nb);
+float				percent(int start, int end, int current);
 /*
-**exp
+**size
 */
 size_t				ft_strlcat(char *dst,
 								const char *src, size_t dstsize);
@@ -108,12 +104,13 @@ typedef struct		s_list
 	size_t			content_size;
 	struct s_list	*next;
 }					t_list;
-
+/*
+**list
+*/
 void				ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
 void				ft_lstdel(t_list **alst, void (*del)(void*, size_t));
 void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
-
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 t_list				*ft_lstnew(void const *content, size_t content_size);
 

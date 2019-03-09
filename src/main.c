@@ -17,12 +17,21 @@ int		stop(char *str)
 	if (str != NULL)
 	{
 		ft_putendl("\033[22;36mUsage: ./wolf3d ./maps/[mapname]");
-		ft_putendl("\033[23;32m[level1] | [level2] | [level3]");
+		ft_putendl("\033[23;32m[labrint] | [sample] | [minec]");
 	}
 	ft_putstr(str);
 	SDL_Quit();
 	exit(1);
-	return (0);
+}
+
+void	chose(t_core *core, char *name)
+{
+	if (ft_strcmp("./maps/labrint", name) == 0)
+		core->name = 1;
+	else if (!(ft_strcmp("./maps/minec", name)))
+		core->name = 2;
+	else
+		core->name = 0;
 }
 
 int		main(int argc, char **argv)
@@ -35,10 +44,9 @@ int		main(int argc, char **argv)
 		stop("\033[22;31mERROR: too many args\n");
 	if (!(core = ft_memalloc(sizeof(t_core))))
 		stop("\033[22;31mERROR: failed to malloc main struct");
-	core->w = W_X;
-	core->h = W_Y;	
 	if (!(read_map(core, argv[1])))
 		stop("\033[22;31mERROR: invalid map\n");
+	chose(core, argv[1]);
 	game_loop(core);
 	return (0);
 }

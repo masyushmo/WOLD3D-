@@ -14,51 +14,50 @@
 
 void	player_init(t_player *player)
 {
-	player->coordX = 2;
-	player->coordY = 2;
-	player->dirX = 1;
-	player->dirY = 0;
-	player->planX = 0;
-	player->planY = 0.75;
-	player->speedMOVE= 0.1;
-	player->speedROT = 0.1;
+	player->coord_x = 1.5;
+	player->coord_y = 1.5;
+	player->dir_x = 1;
+	player->dir_y = 0;
+	player->plan_x = 0;
+	player->plan_y = 0.90;
+	player->speed_mov = 0.05;
+	player->speed_rot = 0.05;
+	player->shift = 1.5;
 }
 
 void	rays_init(t_player *player, t_ray *ray, t_core *core)
 {
-	ray->winX = 2 * core->win_pixX / (double)core->w - 1.0;
-	ray->rayX = player->coordX;
-	ray->rayY = player->coordY;
-	ray->rayDirX = player->dirX + player->planX * ray->winX;
-	ray->rayDirY = player->dirY + player->planY * ray->winX;
-	ray->mapX = (int)player->coordX;
-	ray->mapY = (int)player->coordY;
+	ray->win_corx = 2 * core->win_x / (double)core->w - 1.0;
+	ray->raydir_x = player->dir_x + player->plan_x * ray->win_corx;
+	ray->raydir_y = player->dir_y + player->plan_y * ray->win_corx;
+	ray->map_x = (int)player->coord_x;
+	ray->map_y = (int)player->coord_y;
 }
 
 void	dda_init(t_dda *dda, t_ray *ray, t_player *player)
 {
-	dda->deltaX = fabs(1 / ray->rayDirX);
-	dda->deltaY = fabs(1 / ray->rayDirY);
+	dda->delta_x = fabs(1 / ray->raydir_x);
+	dda->delta_y = fabs(1 / ray->raydir_y);
 	dda->wall_hitt = 0;
-	if (ray->rayDirX < 0)
+	if (ray->raydir_x < 0)
 	{
-		dda->stepSideX = -1;
-		dda->sideX = (player->coordX - ray->mapX) * dda->deltaX;
+		dda->stepside_x = -1;
+		dda->side_x = (player->coord_x - ray->map_x) * dda->delta_x;
 	}
 	else
 	{
-		dda->stepSideX = 1;
-		dda->sideX = (ray->mapX + 1.0 - player->coordX) * dda->deltaX;
+		dda->stepside_x = 1;
+		dda->side_x = (ray->map_x + 1.0 - player->coord_x) * dda->delta_x;
 	}
-	if (ray->rayDirY < 0)
+	if (ray->raydir_y < 0)
 	{
-		dda->stepSideY = -1;
-		dda->sideY = (player->coordY - ray->mapY) * dda->deltaY;
+		dda->stepside_y = -1;
+		dda->side_y = (player->coord_y - ray->map_y) * dda->delta_y;
 	}
 	else
 	{
-		dda->stepSideY = 1;
-		dda->sideY = (ray->mapY + 1.0 - player->coordY) * dda->deltaY;
+		dda->stepside_y = 1;
+		dda->side_y = (ray->map_y + 1.0 - player->coord_y) * dda->delta_y;
 	}
 }
 
@@ -74,4 +73,20 @@ void	structs_init(t_core *core)
 		stop("\033[22;31mERROR: failed to malloc struct");
 	if (!(core->texture = ft_memalloc(sizeof(t_texture))))
 		stop("\033[22;31mERROR: failed to malloc struct");
+	if (!(core->sound = ft_memalloc(sizeof(t_sound))))
+		stop("\033[22;31mERROR: failed to malloc struct");
+}
+
+void	core_init(t_core *core)
+{
+	core->quit = 0;
+	core->w = W_X;
+	core->h = W_Y;
+	core->fog_dis = 5;
+	structs_init(core);
+	create_win(core);
+	player_init(core->player);
+	load_level(core->texture, core);
+	core->sound->mus_n = 0;
+	core->paint->shade = DARK;
 }

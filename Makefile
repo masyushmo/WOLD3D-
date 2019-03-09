@@ -22,9 +22,13 @@ SRC = main.c \
 		keys.c \
 		moves.c \
 		textures.c \
-
+		labrint.c \
+		sound.c \
+		minec.c \
 
 CC = gcc
+
+FLAGS = -O3 -Wall -Werror -Wextra
 
 INC = includes/wolf3d.h
 
@@ -60,7 +64,7 @@ all: obj_dir $(FT_LIB) $(NAME)
 obj_dir:
 	@mkdir -p $(OBJ_DIR)
 $(NAME): $(OBJ)
-	$(CC) $(FLAGS) $(SDL) $(OBJ) $(LINKS) -o $(NAME) -g -fsanitize=address
+	$(CC) $(FLAGS) $(SDL) $(OBJ) $(LINKS) -o $(NAME)
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(INC)
 	$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 $(FT_LIB):

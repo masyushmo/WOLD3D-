@@ -12,42 +12,57 @@
 
 #include "../includes/wolf3d.h"
 
-void	moveUP(t_core *core, t_player *player)
+void	move_up(t_core *core, t_player *player)
 {
-	if (core->map[(int)(player->coordY)][(int)(player->coordX
-		+ player->dirX * player->speedMOVE)] == 0)
-		player->coordX += player->dirX * player->speedMOVE;
-	if (core->map[(int)(player->coordY + player->dirY
-		* player->speedMOVE)][(int)(player->coordX)] == 0)
-		player->coordY += player->dirY * player->speedMOVE;
+	if (core->map[(int)(player->coord_y)][(int)(player->coord_x
+		+ player->dir_x * ((player->speed_mov + 0.2) * player->shift))] == 0)
+		player->coord_x += player->dir_x * (player->speed_mov * player->shift);
+	if (core->map[(int)(player->coord_y + player->dir_y * ((player->speed_mov +
+		0.2) * player->shift))][(int)(player->coord_x)] == 0)
+		player->coord_y += player->dir_y * (player->speed_mov * player->shift);
+	move_sound(player, core->sound);
 }
 
-void	moveDOWN(t_core *core, t_player *player)
+void	move_down(t_core *core, t_player *player)
 {
-	if (core->map[(int)(player->coordY)][(int)(player->coordX
-		- player->dirX * player->speedMOVE)] == 0)
-		player->coordX -= player->dirX * player->speedMOVE;
-	if (core->map[(int)(player->coordY - player->dirY
-		* player->speedMOVE)][(int)(player->coordX)] == 0)
-		player->coordY -= player->dirY * player->speedMOVE;
+	if (core->map[(int)(player->coord_y)][(int)(player->coord_x
+		- player->dir_x * ((player->speed_mov + 0.2) * player->shift))] == 0)
+		player->coord_x -= player->dir_x * (player->speed_mov * player->shift);
+	if (core->map[(int)(player->coord_y - player->dir_y * ((player->speed_mov +
+		0.2) * player->shift))][(int)(player->coord_x)] == 0)
+		player->coord_y -= player->dir_y * (player->speed_mov * player->shift);
+	move_sound(player, core->sound);
 }
 
-void	moveRIGHT(t_core *core, t_player *player)
+void	move_right(t_core *core, t_player *player)
 {
-	if (core->map[(int)(player->coordY)][(int)(player->coordX
-		+ player->planX * player->speedMOVE)] == 0)
-		player->coordX += player->planX * player->speedMOVE;
-	if (core->map[(int)(player->coordY + player->planY
-		* player->speedMOVE)][(int)(player->coordX)] == 0)
-		player->coordY += player->planY * player->speedMOVE;
+	if (core->map[(int)(player->coord_y)][(int)(player->coord_x
+		+ player->plan_x * ((player->speed_mov + 0.2) * player->shift))] == 0)
+		player->coord_x += player->plan_x * (player->speed_mov * player->shift);
+	if (core->map[(int)(player->coord_y + player->plan_y * ((player->speed_mov +
+		0.2) * player->shift))][(int)(player->coord_x)] == 0)
+		player->coord_y += player->plan_y * (player->speed_mov * player->shift);
+	move_sound(player, core->sound);
 }
 
-void	moveLEFT(t_core *core, t_player *player)
+void	move_left(t_core *core, t_player *player)
 {
-	if (core->map[(int)(player->coordY)][(int)(player->coordX
-		- player->planX * player->speedMOVE)] == 0)
-		player->coordX -= player->planX * player->speedMOVE;
-	if (core->map[(int)(player->coordY - player->planY
-		* player->speedMOVE)][(int)(player->coordX)] == 0)
-		player->coordY -= player->planY * player->speedMOVE;
+	if (core->map[(int)(player->coord_y)][(int)(player->coord_x
+		- player->plan_x * ((player->speed_mov + 0.2) * player->shift))] == 0)
+		player->coord_x -= player->plan_x * (player->speed_mov * player->shift);
+	if (core->map[(int)(player->coord_y - player->plan_y * ((player->speed_mov +
+		0.2) * player->shift))][(int)(player->coord_x)] == 0)
+		player->coord_y -= player->plan_y * (player->speed_mov * player->shift);
+	move_sound(player, core->sound);
+}
+
+void	move_sound(t_player *player, t_sound *sound)
+{
+	if (player->shift == 1.5)
+	{
+		if (!(Mix_Playing(-1)))
+			Mix_PlayChannel(-1, sound->steps, 0);
+	}
+	else if (!(Mix_Playing(0)))
+		Mix_PlayChannel(0, sound->run, 0);
 }
