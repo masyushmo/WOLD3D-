@@ -24,6 +24,12 @@
 # define W_Y 720
 # define DARK 0x000000
 # define FOG 0xD8D5D1
+# define WTN 9
+# define FCTN 2
+# define LBR 91
+# define RBR 93
+# define GREATER 46
+# define LESER 44
 # define EXIT (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
 
 typedef struct		s_player
@@ -87,7 +93,7 @@ typedef struct		s_texture
 	SDL_Surface		**wall_tey;
 	SDL_Surface		**floor_tex;
 	SDL_Surface		**cell_tex;
-	SDL_Surface		**sky_tex;
+	SDL_Surface		*pause;
 }					t_texture;
 
 typedef struct		s_sound
@@ -99,22 +105,13 @@ typedef struct		s_sound
 	int				mus_n;
 }					t_sound;
 
-typedef struct		s_gun
-{
-	SDL_Rect		rect;
-	int				frame_w;
-	int				frame_h;
-	int				tx_w;
-	int				tx_h;
-}					t_gun;
-
 typedef struct		s_core
 {
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Texture		*tex;
-	SDL_Rect		*rect;
 	SDL_Surface		*surface;
+	int				game;
 	int				win_x;
 	int				win_y;
 	int				w;
@@ -148,9 +145,10 @@ void				chose(t_core *core, char *name);
 **sdl.c
 */
 void				create_win(t_core *core);
-void				display_core(t_core *core);
+void				display_core(t_core *core, SDL_Surface *surface);
 SDL_Surface			*load_tex(char *path, t_core *core);
-void				sdl_clean(t_core *core);
+void				clean(t_core *core);
+void				clean_addon(t_core *core);
 /*
 **read.c
 */
@@ -182,7 +180,6 @@ int					color_value(Uint32 start, Uint32 end, float per);
 Uint32				pix_from_text(SDL_Surface *texture, int x, int y);
 void				pix_to_surf(SDL_Surface *surface, \
 						int x, int y, Uint32 color);
-void				paint(t_core *core);
 /*
 **paint_calc.c
 */
@@ -230,9 +227,9 @@ void				load_sound_min(t_sound *sound);
 **sound.c
 */
 void				play_music(t_sound *sound, int n);
-void				switch_music(t_sound *sound, const Uint8 *state);
+void				switch_music(t_sound *sound, SDL_Event	event);
 void				spec_chunks(t_core *core);
+Mix_Chunk			*load_sou(char *path);
 Mix_Music			*load_mus(char *path);
-Mix_Chunk			*load_sou(char	*path);
 
 #endif

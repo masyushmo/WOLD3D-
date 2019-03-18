@@ -64,7 +64,7 @@ all: obj_dir $(FT_LIB) $(NAME)
 obj_dir:
 	@mkdir -p $(OBJ_DIR)
 $(NAME): $(OBJ)
-	$(CC) $(FLAGS) $(SDL) $(OBJ) $(LINKS) -o $(NAME)
+	$(CC) $(FLAGS) $(SDL) $(OBJ) $(LINKS) -o $(NAME) -g
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(INC)
 	$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 $(FT_LIB):
