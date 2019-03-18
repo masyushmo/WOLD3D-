@@ -66,7 +66,6 @@ void	paint_wall_add(t_core *core, t_paint *paint)
 {
 	int color;
 
-	color = 0x0000FF;
 	if (core->name == 0)
 		color = set_sample(core, core->paint);
 	else
@@ -113,6 +112,8 @@ void	paint_floor(t_core *core, t_paint *paint)
 void	paint_wall(t_core *core, t_paint *paint)
 {
 	paint->tex_num = core->map[core->ray->map_y][core->ray->map_x] - 1;
+	if (paint->tex_num > 9)
+		paint->tex_num = 0;
 	if (core->dda->s == 0)
 		paint->wall_x = core->player->coord_y + core->distance * \
 			core->ray->raydir_y;

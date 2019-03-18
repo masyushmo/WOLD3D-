@@ -22,21 +22,24 @@ void		play_music(t_sound *sound, int n)
 		Mix_PauseMusic();
 }
 
-void		switch_music(t_sound *sound, const Uint8 *state)
+void		switch_music(t_sound *sound, SDL_Event event)
 {
-	if (state[SDL_SCANCODE_M])
-		play_music(sound, sound->mus_n);
-	if (state[SDL_SCANCODE_PERIOD] && sound->mus_n < 4)
+	if (event.type == SDL_KEYDOWN)
 	{
-		Mix_HaltMusic();
-		sound->mus_n += 1;
-		play_music(sound, sound->mus_n);
-	}
-	if (state[SDL_SCANCODE_COMMA] && sound->mus_n > 0)
-	{
-		Mix_HaltMusic();
-		sound->mus_n -= 1;
-		play_music(sound, sound->mus_n);
+		if (event.key.keysym.sym == SDLK_m)
+			play_music(sound, sound->mus_n);
+		else if (event.key.keysym.sym == GREATER && sound->mus_n < 4)
+		{
+			Mix_HaltMusic();
+			sound->mus_n += 1;
+			play_music(sound, sound->mus_n);
+		}
+		else if (event.key.keysym.sym == LESER && sound->mus_n > 0)
+		{
+			Mix_HaltMusic();
+			sound->mus_n -= 1;
+			play_music(sound, sound->mus_n);
+		}
 	}
 }
 

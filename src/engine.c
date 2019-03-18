@@ -59,7 +59,8 @@ void	game_calc(t_core *core)
 		core->end = core->wall_h / 2 + core->h / 2;
 		if (core->end >= core->h)
 			core->end = core->h - 1;
-		paint(core);
+		paint_wall(core, core->paint);
+		paint_floor(core, core->paint);
 	}
 }
 
@@ -83,13 +84,21 @@ void	game_loop(t_core *core)
 	while (!(core->quit))
 	{
 		keyses(core);
-		mouse(core);
-		if (SDL_MUSTLOCK(core->surface))
-			SDL_LockSurface(core->surface);
-		game_calc(core);
-		if (SDL_MUSTLOCK(core->surface))
-			SDL_UnlockSurface(core->surface);
-		spec_chunks(core);
-		display_core(core);
+		if (core->game == 1)
+		{
+			SDL_ShowCursor(SDL_DISABLE);
+			SDL_SetWindowGrab(core->win, SDL_FALSE);
+			SDL_SetRelativeMouseMode(SDL_ENABLE);
+			mouse(core);
+			game_calc(core);
+			spec_chunks(core);
+			display_core(core, core->surface);
+		}
+		else
+		{
+			SDL_ShowCursor(SDL_ENABLE);
+			SDL_SetRelativeMouseMode(SDL_DISABLE);
+			display_core(core, core->texture->pause);
+		}
 	}
 }

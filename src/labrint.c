@@ -21,7 +21,7 @@ void	labrint(t_core *core)
 
 void	wall_lab(t_texture *texture, t_core *core)
 {
-	if (!(texture->wall_tex = ft_memalloc(sizeof(SDL_Surface) * 9)))
+	if (!(texture->wall_tex = ft_memalloc(sizeof(SDL_Surface) * WTN)))
 		stop("\033[22;31mERROR: failed to malloc textures");
 	texture->wall_tex[0] = load_tex("./textures/labrint/WALL1.bmp", core);
 	texture->wall_tex[1] = load_tex("./textures/labrint/WALL2.bmp", core);
@@ -32,7 +32,7 @@ void	wall_lab(t_texture *texture, t_core *core)
 	texture->wall_tex[6] = load_tex("./textures/labrint/WALL6.bmp", core);
 	texture->wall_tex[7] = load_tex("./textures/labrint/WALL7.bmp", core);
 	texture->wall_tex[8] = load_tex("./textures/labrint/WALL8.bmp", core);
-	if (!(texture->wall_tey = ft_memalloc(sizeof(SDL_Surface) * 9)))
+	if (!(texture->wall_tey = ft_memalloc(sizeof(SDL_Surface) * WTN)))
 		stop("\033[22;31mERROR: failed to malloc textures");
 	texture->wall_tey[0] = load_tex("./textures/labrint/WALL1D.bmp", core);
 	texture->wall_tey[1] = load_tex("./textures/labrint/WALL2D.bmp", core);
@@ -47,11 +47,11 @@ void	wall_lab(t_texture *texture, t_core *core)
 
 void	f_c_lab(t_texture *texture, t_core *core)
 {
-	if (!(texture->floor_tex = ft_memalloc(sizeof(SDL_Surface) * 2)))
+	if (!(texture->floor_tex = ft_memalloc(sizeof(SDL_Surface) * FCTN)))
 		stop("\033[22;31mERROR: failed to malloc textures");
 	texture->floor_tex[0] = load_tex("./textures/labrint/FLOOR.bmp", core);
 	texture->floor_tex[1] = load_tex("./textures/labrint/FLOOR2.bmp", core);
-	if (!(texture->cell_tex = ft_memalloc(sizeof(SDL_Surface) * 2)))
+	if (!(texture->cell_tex = ft_memalloc(sizeof(SDL_Surface) * FCTN)))
 		stop("\033[22;31mERROR: failed to malloc textures");
 	texture->cell_tex[0] = load_tex("./textures/labrint/CELL.bmp", core);
 	texture->cell_tex[1] = load_tex("./textures/labrint/CELL2.bmp", core);

@@ -52,12 +52,31 @@ void	keyses(t_core *core)
 	const Uint8 *state;
 
 	state = SDL_GetKeyboardState(NULL);
-	while (SDL_PollEvent(&event))
+	if (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT || EXIT)
 			core->quit = 1;
+		if (event.type == SDL_KEYDOWN)
+		{
+			if (event.key.keysym.sym == SDLK_SPACE)
+			{
+				if (core->game == 0)
+					core->game = 1;
+				else
+					core->game = 0;
+			}
+			if (event.key.keysym.sym == RBR && core->fog_dis < 20)
+				core->fog_dis += 1;
+			if (event.key.keysym.sym == LBR && core->fog_dis > 1)
+				core->fog_dis -= 1;
+		}
 	}
-	switch_music(core->sound, state);
+	switch_music(core->sound, event);
+	keyses_addon(core, state);
+}
+
+void	keyses_addon(t_core *core, const Uint8 *state)
+{
 	if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W])
 		move_up(core, core->player);
 	if (state[SDL_SCANCODE_DOWN] || state[SDL_SCANCODE_S])
@@ -70,15 +89,6 @@ void	keyses(t_core *core)
 		rotate_left(core->player);
 	if (state[SDL_SCANCODE_RIGHT])
 		rotate_right(core->player);
-	keyses_addon(core, state);
-}
-
-void	keyses_addon(t_core *core, const Uint8 *state)
-{
-	if (state[SDL_SCANCODE_RIGHTBRACKET] && core->fog_dis < 20)
-		core->fog_dis += 1;
-	if (state[SDL_SCANCODE_LEFTBRACKET] && core->fog_dis > 1)
-		core->fog_dis -= 1;
 	if (state[SDL_SCANCODE_KP_1])
 		core->paint->shade = DARK;
 	if (state[SDL_SCANCODE_KP_2])

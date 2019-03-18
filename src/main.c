@@ -16,19 +16,20 @@ int		stop(char *str)
 {
 	if (str != NULL)
 	{
-		ft_putendl("\033[22;36mUsage: ./wolf3d ./maps/[mapname]");
+		ft_putendl("\033[22;36mUsage: ./wolf3d maps/[mapname]");
 		ft_putendl("\033[23;32m[labrint] | [sample] | [minec]");
 	}
 	ft_putstr(str);
-	SDL_Quit();
 	exit(1);
 }
 
 void	chose(t_core *core, char *name)
 {
-	if (ft_strcmp("./maps/labrint", name) == 0)
+	if ((!(ft_strcmp("./maps/labrint", name))) ||
+		(!(ft_strcmp("maps/labrint", name))))
 		core->name = 1;
-	else if (!(ft_strcmp("./maps/minec", name)))
+	else if ((!(ft_strcmp("maps/minec", name))) ||
+		(!(ft_strcmp("./maps/minec", name))))
 		core->name = 2;
 	else
 		core->name = 0;
@@ -48,5 +49,6 @@ int		main(int argc, char **argv)
 		stop("\033[22;31mERROR: invalid map\n");
 	chose(core, argv[1]);
 	game_loop(core);
+	clean(core);
 	return (0);
 }

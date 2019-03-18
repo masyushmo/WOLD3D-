@@ -30,9 +30,51 @@ void		create_win(t_core *core)
 	core->surface = SDL_CreateRGBSurface(0, core->w, core->h, 32, 0, 0, 0, 0);
 	if (core->surface == NULL)
 		stop("\033[22;31mERROR: failed to create surface");
-	SDL_ShowCursor(SDL_DISABLE);
-	SDL_SetWindowGrab(core->win, SDL_FALSE);
-	SDL_SetRelativeMouseMode(SDL_ENABLE);
+}
+
+void		clean_addon(t_core *core)
+{
+	int i;
+
+	i = -1;
+	while (++i < 5)
+		Mix_FreeMusic(core->sound->music[i]);
+	i = -1;
+	if (core->name == 1)
+		while (++i < 7)
+			Mix_FreeChunk(core->sound->lcrip[i]);
+	SDL_FreeSurface(core->texture->pause);
+	Mix_FreeChunk(core->sound->steps);
+	Mix_FreeChunk(core->sound->run);
+	SDL_FreeSurface(core->surface);
+	SDL_DestroyTexture(core->tex);
+	SDL_DestroyRenderer(core->rend);
+	SDL_DestroyWindow(core->win);
+	SDL_Quit();
+}
+
+void		clean(t_core *core)
+{
+	int i;
+
+	i = -1;
+	while (++i < WTN)
+	{
+		SDL_FreeSurface(core->texture->wall_tex[i]);
+		SDL_FreeSurface(core->texture->wall_tey[i]);
+	}
+	free(core->texture->wall_tex);
+	free(core->texture->wall_tey);
+	i = -1;
+	while (++i < 2)
+	{
+		SDL_FreeSurface(core->texture->floor_tex[i]);
+		SDL_FreeSurface(core->texture->cell_tex[i]);
+	}
+	free(core->texture->floor_tex);
+	free(core->texture->cell_tex);
+	free(core->texture);
+	clean_addon(core);
 }
 
 SDL_Surface	*load_tex(char *path, t_core *core)
@@ -51,12 +93,11 @@ SDL_Surface	*load_tex(char *path, t_core *core)
 	return (texture);
 }
 
-void		display_core(t_core *core)
+void		display_core(t_core *core, SDL_Surface *surface)
 {
 	SDL_RenderClear(core->rend);
 	SDL_DestroyTexture(core->tex);
-	core->tex = SDL_CreateTextureFromSurface(core->rend,
-		core->surface);
+	core->tex = SDL_CreateTextureFromSurface(core->rend, surface);
 	SDL_RenderCopy(core->rend, core->tex, NULL, NULL);
 	SDL_RenderPresent(core->rend);
 }

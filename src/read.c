@@ -130,7 +130,7 @@ int	read_map(t_core *core, char *file)
 	close(fd);
 	if (!(fd = open(file, O_RDONLY)))
 		return (0);
-	if (!(count(core, fd)))
+	if (!(count(core, fd)) || (core->map_height < 2))
 		return (0);
 	close(fd);
 	if (!(fd = open(file, O_RDONLY)))

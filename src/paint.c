@@ -39,9 +39,3 @@ Uint32	pix_from_text(SDL_Surface *texture, int x, int y)
 	ptr = (Uint32 *)texture->pixels;
 	return (ptr[(y * texture->w) + x]);
 }
-
-void	paint(t_core *core)
-{
-	paint_wall(core, core->paint);
-	paint_floor(core, core->paint);
-}
